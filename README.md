@@ -3,13 +3,10 @@
 Rayv Code-o-Tron 3000 Hackathon Essay Submission
 Title: Multimodal Deep Learning for Safe Content Classification in Short Videos
 ________________________________________
-Introduction
 With the rise of short-form video platforms like TikTok, the challenge of detecting harmful or unsafe content in real-time has become increasingly important. As a beginner, I approached this hackathon with the aim of exploring how AI and computer vision can be used to solve this real-world problem using both classic and advanced deep learning methods. This journey taught me the importance of modular model design, dataset preparation, and fusion of different data types (visual, audio, and text).
 ________________________________________
-Dataset Challenges
 I used the TikHarm Dataset, which is 30 GB+ in size and structured similarly to UCF101. It contains labeled videos under four categories: Safe, Adult, Harmful, and Suicide. Each class varies in content complexity and duration, and the dataset includes separate folders for train, test, and validation.
 ________________________________________
-Models Explored in Phases
 Phase 1: Frame-Based CNN (MobileNetV2)
 •	Extracted 1 FPS frames from videos.
 •	Applied MobileNetV2 on each frame and used majority voting.
@@ -50,7 +47,7 @@ Phase 7: Vision Transformer (ViT)
 •	Averaged softmax outputs across frames.
 •	Result: SOTA accuracy on image-based scenes but lacks audio/text context.
 ________________________________________
-Why Phase 5 and 6 Are the Best
+Why Phase 5 and 6 Are the Best?
 ✅ 3D CNN (Phase 5) is best when your compute budget allows and you want a deep, video-only model that "understands" motion.
 ✅ Fusion Model (Phase 6) is best for hackathon deployment because:
 •	It uses all three modalities.
@@ -58,5 +55,4 @@ Why Phase 5 and 6 Are the Best
 •	It generates explainable outputs: label, confidence, and notes.
 Combining both is ideal: Use 3D CNN as visual backbone in a future fusion model.
 ________________________________________
-Conclusion
 I explored AI models through this hackathon — from basic classical ML to advanced 3D CNNs and Transformers. As a beginner, building and debugging multimodal pipelines was tough but rewarding. I now understand how crucial it is to align models with both the dataset and real-world constraints. My final system fuses visual, audio, and text content to give robust, confident predictions, making it scalable and effective for content moderation platforms.
