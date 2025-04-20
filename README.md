@@ -1,10 +1,6 @@
 # video-content-moderation
 
-# 📄 Combined README: TikTok Harmful Content Detection
-
----
-
-# TikTok Harmful Content Detection (Two Approaches)
+#Harmful Content Detection (Two Approaches)
 
 ## 📚 Project 1 - Visual-only 3D CNN Model (Hackathon Submission)
 
