@@ -148,7 +148,7 @@ with zipfile.ZipFile("/content/tikharm_dataset.zip", 'r') as zip_ref:
 
 ---
 
-# 📊 Final Project Submission Structure
+# Structure
 
 | File | Description |
 |:-----|:------------|
