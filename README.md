@@ -1,58 +1,168 @@
 # video-content-moderation
 
-Rayv Code-o-Tron 3000 Hackathon Essay Submission
-Title: Multimodal Deep Learning for Safe Content Classification in Short Videos
-________________________________________
-With the rise of short-form video platforms like TikTok, the challenge of detecting harmful or unsafe content in real-time has become increasingly important. As a beginner, I approached this hackathon with the aim of exploring how AI and computer vision can be used to solve this real-world problem using both classic and advanced deep learning methods. This journey taught me the importance of modular model design, dataset preparation, and fusion of different data types (visual, audio, and text).
-________________________________________
-I used the TikHarm Dataset, which is 30 GB+ in size and structured similarly to UCF101. It contains labeled videos under four categories: Safe, Adult, Harmful, and Suicide. Each class varies in content complexity and duration, and the dataset includes separate folders for train, test, and validation.
-________________________________________
-Phase 1: Frame-Based CNN (MobileNetV2)
-•	Extracted 1 FPS frames from videos.
-•	Applied MobileNetV2 on each frame and used majority voting.
-•	Pros: Fast, great baseline.
-•	Cons: Ignores motion or audio cues.
-Phase 2: Metadata-Based Classical ML (Random Forest)
-•	Used duration, category, and synthetic notes.
-•	Applied TF-IDF + OneHot encoding.
-•	Pros: Quick to implement.
-•	Cons: Doesn’t use actual video or sound.
-Phase 3: Modal-Level Models
-•	Separate models for text (BERT), visual (CNN), and audio (MFCC + SVM).
-•	Helped understand each modality's strength.
-Phase 4: CNN + LSTM for Sequences
-•	Used MobileNetV2 + LSTM on a sequence of frames.
-•	Captured temporal patterns (e.g., buildup of aggression).
-•	Challenge: Heavy on GPU, complex to debug.
-Phase 5: 3D CNN (R3D18)
-•	Input video as a 3D tensor (C, T, H, W).
-•	Fine-tuned pretrained r3d_18 model.
-•	Why it’s one of the best:
-o	Captures both what is happening and how it evolves.
-o	Excellent for detecting motion-heavy scenes like fights, abuse, etc.
-•	Issues faced:
-o	GPU memory.
-o	Preprocessing required consistent frame shapes and lengths.
-Phase 6: Multimodal Fusion Model
-•	Combined predictions from audio, visual, and text using Logistic Regression.
-•	Audio: MFCCs from librosa.
-•	Visual: Mocked confidence (can be MobileNet or ViT).
-•	Text: TF-IDF on notes.
-•	Why it's best for hackathon scalability:
-o	Lightweight and interpretable.
-o	Allows fallback if one modality is missing.
-o	Easy to improve by upgrading base models.
-Phase 7: Vision Transformer (ViT)
-•	Tokenized frames using ViTFeatureExtractor.
-•	Averaged softmax outputs across frames.
-•	Result: SOTA accuracy on image-based scenes but lacks audio/text context.
-________________________________________
-Why Phase 5 and 6 Are the Best?
-✅ 3D CNN (Phase 5) is best when your compute budget allows and you want a deep, video-only model that "understands" motion.
-✅ Fusion Model (Phase 6) is best for hackathon deployment because:
-•	It uses all three modalities.
-•	You can easily swap or improve models.
-•	It generates explainable outputs: label, confidence, and notes.
-Combining both is ideal: Use 3D CNN as visual backbone in a future fusion model.
-________________________________________
-I explored AI models through this hackathon — from basic classical ML to advanced 3D CNNs and Transformers. As a beginner, building and debugging multimodal pipelines was tough but rewarding. I now understand how crucial it is to align models with both the dataset and real-world constraints. My final system fuses visual, audio, and text content to give robust, confident predictions, making it scalable and effective for content moderation platforms.
+# 📄 Combined README: TikTok Harmful Content Detection
+
+---
+
+# TikTok Harmful Content Detection (Two Approaches)
+
+## 📚 Project 1 - Visual-only 3D CNN Model (Hackathon Submission)
+
+---
+
+## 🌟 Objective:
+- Classify TikTok videos into:
+  - **Adult Content**
+  - **Harmful Content**
+  - **Safe**
+  - **Suicide**
+- **Predict Safe/Unsafe + Confidence + Notes**
+
+---
+
+## 📋 Steps:
+
+### 1. Upload Dataset
+- Upload manually `tikharm_dataset.zip`.
+
+```python
+from google.colab import files
+uploaded = files.upload()
+```
+
+### 2. Unzip Dataset
+
+```python
+import zipfile
+with zipfile.ZipFile("/content/tikharm_dataset.zip", 'r') as zip_ref:
+    zip_ref.extractall("/content/tikharm_dataset")
+```
+
+✅ Dataset folders:
+- `/content/tikharm_dataset/tikharm_dataset/train/`
+  - `adult/`
+  - `harmful/`
+  - `safe/`
+  - `suicide/`
+
+### 3. Install Libraries
+
+```python
+!pip install torch torchvision moviepy
+```
+
+### 4. Data Preparation
+- **Extract 8 frames** from each video.
+- **Resize frames** to `112x112`.
+- Stack as `[C, T, H, W]` for input to 3D CNN.
+
+### 5. Build the Model
+- **Backbone:** `r3d_18` (ResNet 3D, pretrained).
+- Final layer: 4-class classification head.
+
+### 6. Train the Model
+- Loss: CrossEntropy
+- Optimizer: Adam
+- 3 Epochs
+- Batch size = 2
+
+### 7. Upload and Predict
+- Upload any new video.
+- Extract frames and predict:
+  - Category
+  - Safe/Unsafe
+  - Confidence
+  - Notes
+
+## ✅ Deliverables:
+
+| Deliverable | Details |
+|:------------|:--------|
+| Trained 3D CNN | Only video frames |
+| Safe/Unsafe Prediction | Confidence score |
+| Notes Generation | For explanation |
+
+## 🏆 Advantages:
+- Lightweight (only visual input)
+- Fast training
+- Perfect for TikTok moderation tasks
+
+---
+
+# 📄 Project 2: Phase-Wise Multimodal Model (Frame, Audio, Text, Transformer Fusion)
+
+---
+
+## 🌟 Objective:
+- Detect harmful content by combining:
+  - **Frame-Level Features**
+  - **Audio Analysis**
+  - **Text Metadata Analysis**
+  - **BERT Embeddings**
+  - **Vision Transformers (ViT)**
+
+---
+
+## 📋 Steps:
+
+### 1. Upload Dataset
+- Upload manually `tikharm_dataset.zip`.
+
+### 2. Unzip Dataset
+
+```python
+import zipfile
+with zipfile.ZipFile("/content/tikharm_dataset.zip", 'r') as zip_ref:
+    zip_ref.extractall("/content/tikharm_dataset")
+```
+
+### 3. Install Libraries
+
+```python
+!pip install torch torchvision torchaudio torchvggish moviepy ffmpeg-python transformers
+```
+
+### 4. Phase-by-Phase Approach:
+
+| Phase | Description |
+|:------|:------------|
+| Phase 1 | Frame Classification with MobileNetV2 |
+| Phase 2 | Metadata Random Forest Model |
+| Phase 3 | Visual + Text Fusion (BERT + Logistic Regression) |
+| Phase 4 | Video Sequence LSTM (MobileNetV2 + LSTM) |
+| Phase 5 | Spatio-Temporal 3D CNN (Conv3D) |
+| Phase 6 | Fusion Model (Audio + Visual + Text Confidence) |
+| Phase 7 | Vision Transformer (ViT) Frame Classification |
+
+---
+
+## 💚 Deliverables:
+- Phase-by-phase trained models.
+- Frame, Audio, Text feature extraction.
+- Fusion models and transformers.
+- Safe/Unsafe predictions with explanation notes.
+
+---
+
+## 🏆 Advantages:
+- Complete multimodal learning pipeline.
+- Integration of CNNs, LSTM, Transformers.
+- Visual, audio, text data all utilized.
+- Scalable and extendable.
+
+---
+
+# 📊 Final Project Submission Structure
+
+| File | Description |
+|:-----|:------------|
+| `visual_model_only.ipynb` | Project 1 Notebook (3D CNN only) |
+| `full_multimodal_phases.ipynb` | Project 2 Notebook (Multimodal pipeline) |
+| `tikharm_dataset.zip` | Dataset |
+| `README.md` | This README |
+| (Optional) `Poster.pdf` | Hackathon poster |
+| (Optional) `project_demo_video.mp4` | Short Demo video |
+
+---
+
+
