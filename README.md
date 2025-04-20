@@ -156,12 +156,11 @@ with zipfile.ZipFile("/content/tikharm_dataset.zip", 'r') as zip_ref:
 
 | File | Description |
 |:-----|:------------|
-| `visual_model_only.ipynb` | Project 1 Notebook (3D CNN only) |
-| `full_multimodal_phases.ipynb` | Project 2 Notebook (Multimodal pipeline) |
+| `Hackathon.ipynb` | Project 1 Notebook (3D CNN only) |
+| `Phases.ipynb` | Project 2 Notebook (Multimodal pipeline) |
 | `tikharm_dataset.zip` | Dataset |
 | `README.md` | This README |
-| (Optional) `Poster.pdf` | Hackathon poster |
-| (Optional) `project_demo_video.mp4` | Short Demo video |
+| `video.mp4` | Short Demo video |
 
 ---
 
