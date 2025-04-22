@@ -1,7 +1,7 @@
 # video-content-moderation
 
 From this project, I have concluded that a Fusion model with Audio, Text and Video (with 3D CNN) is a best model for vidoe content moderation.
-## Part 1 - Visual-only 3D CNN Model and Fusion Model
+# Part 1 - Visual-only 3D CNN Model and Fusion Model
 
 # Part 2 - Phase-Wise Multimodal Model
 
